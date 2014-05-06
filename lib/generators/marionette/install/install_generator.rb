@@ -18,6 +18,14 @@ module Marionette
         Rails.configuration.marionette = { app_name: "#{suggested_app_name}" }
       end
 
+      def use_handlebars?
+        if yes? "Use Handlebars as the template engine?"
+          @using_handlebars = true
+
+          external_libs[:handlebars] = 'http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js'
+        end
+      end
+
       def get_vendor_dependencies
         external_libs.each do |name, lib|
           get lib, "vendor/assets/javascripts/#{name}.js"
@@ -25,27 +33,18 @@ module Marionette
       end
 
       def append_vendor_dependencies
-        %w{underscore backbone marionette}.each do |lib|
+        external_libs.each do |name, lib|
           append_to_file "#{javascript_path}/application.js" do
-            "\n//= require #{lib}"
+            "\n//= require #{name}"
           end
         end
       end
 
-      def append_app_dependencies
-        append_to_file "#{javascript_path}/application.js" do
-          "\n// Patches etc." +
-          "\n//= require_tree config\n" +
-          "\n// App startup" +
-          "\n//= require backbone/app\n" +
-          "\n// App files" +
-          "\n//= require_tree backbone/lib" +
-          "\n//= require_tree backbone/entities" +
-          "\n//= require_tree backbone/apps"
+      def create_directory_layout
+        %w{config backbone}.each do |dir|
+          empty_directory "#{javascript_path}/#{dir}"
         end
-      end
 
-      def create_dir_layout
         %w{apps entities templates lib}.each do |dir|
           empty_directory "#{backbone_path}/#{dir}"
         end
@@ -55,20 +54,54 @@ module Marionette
         end
       end
 
-      def create_app_file
-        template 'app.js.coffee', "#{backbone_path}/app.js.coffee"
-      end
-
-      def start_marionette_app
-        destination = 'app/views/application/index.html.erb'
-        create_file destination unless File.exists? destination
-        append_to_file destination do
-          embed_template 'index.html.erb'
+      def patch_backbone_sync?
+        if yes? "Patch Backbone.sync? (y/n)"
+          template 'config/backbone/sync.js', "#{config_path}/backbone/sync.js"
         end
       end
 
-      def invoke_config
-        generate 'marionette:config'
+      def patch_marionette_renderer
+        if @using_handlebars
+          template 'config/marionette/renderer.js.coffee', "#{config_path}/marionette/renderer.js.coffee"
+        end
+      end
+
+      def create_app_file
+        template 'backbone/app.js.coffee', "#{backbone_path}/app.js.coffee"
+      end
+
+      def use_lib_files?
+        if yes? 'Use namespaced and patched views, controllers, models and collections? (y/n)'
+          # Patched views
+          %w{view item_view composite_view collection_view layout}.each do |view|
+            template "lib/views/#{view}.js.coffee", "#{lib_path}/views/#{view}.js.coffee"
+          end
+
+          # Patched controllers
+          template "lib/controllers/base.js.coffee", "#{lib_path}/controllers/base.js.coffee"
+
+          # Patched entities
+          %w{model collection}.each do |entity|
+            template "lib/entities/#{entity}.js.coffee", "#{lib_path}/entities/#{entity}.js.coffee"
+          end
+        end
+      end
+
+      def append_app_dependencies
+        append_to_file "#{javascript_path}/application.js" do
+          "\n//" +
+          "\n// Patches etc." +
+          "\n//= require_tree config"+
+          "\n//" +
+          "\n// App startup" +
+          "\n//= require backbone/app" +
+          "\n//" +
+          "\n// App files" +
+          "\n//= require_tree backbone/lib" +
+          "\n//= require_tree backbone/entities" +
+          "\n//= require_tree backbone/apps" +
+          "\n//"
+        end
       end
 
       private
