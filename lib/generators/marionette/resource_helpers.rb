@@ -43,6 +43,10 @@ module Marionette
         ERB.new(IO.read(template), nil, '-').result(binding).gsub(/^/, indent)
       end
 
+      def js_application_name
+        Rails.configuration.marionette[:app_name].camelize rescue 'app'
+      end
+
       def rails_application_name
         Rails.application.class.name.split('::').first
       end
