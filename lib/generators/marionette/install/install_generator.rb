@@ -56,7 +56,7 @@ module Marionette
 
       def patch_backbone_sync?
         if yes? "Patch Backbone.sync? (y/n)"
-          template 'config/backbone/sync.js', "#{config_path}/backbone/sync.js"
+          template 'config/backbone/sync.js.coffee', "#{config_path}/backbone/sync.js.coffee"
         end
       end
 
