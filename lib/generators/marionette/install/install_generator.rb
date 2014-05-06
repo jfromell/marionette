@@ -32,6 +32,19 @@ module Marionette
         end
       end
 
+      def append_app_dependencies
+        append_to_file "#{javascript_path}/application.js" do
+          "\n// Patches etc." +
+          "\n//= require_tree config\n" +
+          "\n// App startup" +
+          "\n//= require backbone/app\n" +
+          "\n// App files" +
+          "\n//= require_tree backbone/lib" +
+          "\n//= require_tree backbone/entities" +
+          "\n//= require_tree backbone/apps"
+        end
+      end
+
       def create_dir_layout
         %w{apps entities templates lib}.each do |dir|
           empty_directory "#{backbone_path}/#{dir}"

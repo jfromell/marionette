@@ -9,6 +9,10 @@ module Marionette
 
       def create_renderer
         if yes? 'Use Handlebars as templating engine? (y/n)'
+          get 'http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js', 'vendor/assets/javascripts/handlebars.js'
+          append_to_file "#{javascript_path}/application.js" do
+            "\n//= require handlebars"
+          end
           template 'renderer.js.coffee', "#{config_path}/marionette/renderer.js.coffee"
         end
       end
