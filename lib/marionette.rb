@@ -1,4 +1,5 @@
+require 'marionette/version'
+
 module Marionette
-  class Railtie < ::Rails::Railtie
-  end
+
 end
