@@ -74,15 +74,15 @@ module Marionette
         if yes? 'Use namespaced and patched views, controllers, models and collections? (y/n)'
           # Patched views
           %w{view item_view composite_view collection_view layout}.each do |view|
-            template "lib/views/#{view}.js.coffee", "#{lib_path}/views/#{view}.js.coffee"
+            template "backbone/lib/views/#{view}.js.coffee", "#{lib_path}/views/#{view}.js.coffee"
           end
 
           # Patched controllers
-          template "lib/controllers/base.js.coffee", "#{lib_path}/controllers/base.js.coffee"
+          template "backbone/lib/controllers/base.js.coffee", "#{lib_path}/controllers/base.js.coffee"
 
           # Patched entities
           %w{model collection}.each do |entity|
-            template "lib/entities/#{entity}.js.coffee", "#{lib_path}/entities/#{entity}.js.coffee"
+            template "backbone/lib/entities/#{entity}.js.coffee", "#{lib_path}/entities/#{entity}.js.coffee"
           end
         end
       end
