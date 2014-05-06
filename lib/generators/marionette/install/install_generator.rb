@@ -34,16 +34,16 @@ module Marionette
 
       def create_dir_layout
         %w{apps entities templates lib}.each do |dir|
-          empty_directory "#{javascript_path}/backbone/#{dir}"
+          empty_directory "#{backbone_path}/#{dir}"
         end
 
         %w{components controllers entities utilities views}.each do |dir|
-          empty_directory "#{javascript_path}/bacbone/lib/#{dir}"
+          empty_directory "#{lib_path}/#{dir}"
         end
       end
 
       def create_app_file
-        template 'app.js.coffee', "#{javascript_path}/backbone/app.js.coffee"
+        template 'app.js.coffee', "#{backbone_path}/app.js.coffee"
       end
 
       def start_marionette_app
