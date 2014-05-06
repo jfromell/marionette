@@ -22,7 +22,7 @@ module Marionette
         if yes? "Use Handlebars as the template engine?"
           @using_handlebars = true
 
-          external_libs[:handlebars] = 'http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js'
+          get 'http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js', "vendor/assets/javascripts/handlebars.js"
         end
       end
 
@@ -36,6 +36,12 @@ module Marionette
         external_libs.each do |name, lib|
           append_to_file "#{javascript_path}/application.js" do
             "\n//= require #{name}"
+          end
+        end
+
+        if @using_handlebars
+          append_to_file "#{javascript_path}/application.js" do
+            "\n//= require handlebars"
           end
         end
       end
