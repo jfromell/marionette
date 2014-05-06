@@ -15,7 +15,7 @@ module Marionette
 
       def create_base_entities
         template 'model.js.coffee', "#{lib_path}/entities/model.js.coffee"
-        template 'collection.js.coffee', "#{backbone_path}/entities/collection.js.coffee"
+        template 'collection.js.coffee', "#{lib_path}/entities/collection.js.coffee"
       end
 
       def create_base_controller
