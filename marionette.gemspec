@@ -4,7 +4,7 @@ require 'marionette/version'
 
 Gem::Specification.new do |s|
   s.name = 'marionette'
-  s.version = Marionette::Version
+  s.version = Marionette::VERSION
   s.files = `git ls-files`.split($/)
   s.require_path = ['lib']
 end
