@@ -2,7 +2,7 @@ require 'generators/marionette/resource_helpers'
 
 module Marionette
   module Generators
-    module InstallGenerator < Rails::Generators::Base
+    class InstallGenerator < Rails::Generators::Base
       include Marionette::Generators::ResourceHelpers
 
       source_root File.expand_path('../templates', __FILE__)
