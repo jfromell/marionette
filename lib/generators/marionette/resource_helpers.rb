@@ -26,11 +26,11 @@ module Marionette
         "#{backbone_path}/lib"
       end
 
-      def module_class_name
+      def module_name
         file_name.camelize + 'App'
       end
 
-      def module_underscored_name
+      def module_name_underscored
         file_name.underscore
       end
 

@@ -110,6 +110,16 @@ module Marionette
         end
       end
 
+      def create_index_view
+        if File.exists? 'app/views/application/index.html.erb'
+          append_to_file 'app/views/application/index.html.erb' do
+            embed_template 'index.html.erb'
+          end
+        else
+          template 'index.html.erb', 'app/views/application/index.html.erb'
+        end
+      end
+
       private
 
       def suggested_app_name
